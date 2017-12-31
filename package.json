@@ -1,0 +1,34 @@
+{
+  "name": "math-talk",
+  "version": "1.0.0",
+  "description": "Math Social Media MEAN stack web-app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DylanHarrisonGithub/MathTalk.git"
+  },
+  "keywords": [
+    "MEAN",
+    "Stack",
+    "MongoDB",
+    "Express",
+    "Angular",
+    "Node",
+    "LaTeX",
+    "MathJS",
+    "MathJax"
+  ],
+  "author": "Dylan Harrison",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DylanHarrisonGithub/MathTalk/issues"
+  },
+  "homepage": "https://github.com/DylanHarrisonGithub/MathTalk#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
