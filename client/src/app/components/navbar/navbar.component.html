@@ -1,0 +1,26 @@
+<nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" routerLink="/home">MathTalk</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-left">
+        <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/home">Home</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/home">Dashboard</a></li>
+        <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/home">Profile</a></li>
+        <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/home">Blog</a></li>
+        <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/home">Login</a></li>
+        <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/home">Logout</a></li>
+        <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/home">Register</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
