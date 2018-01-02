@@ -6,6 +6,8 @@ import { HttpModule } from '@angular/http';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 
 import { AuthService } from './services/auth.service';
+import { AuthGuard } from './guards/auth.guard';
+import { NotAuthGuard } from './guards/notauth.guard';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -30,9 +32,13 @@ import { ProfileComponent } from './components/profile/profile.component';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpModule,
-    FlashMessagesModule.forRoot()
+    FlashMessagesModule
   ],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    AuthGuard,
+    NotAuthGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
