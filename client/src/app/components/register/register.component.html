@@ -1,5 +1,10 @@
 <h1 class="page-header">Register Page</h1>
 
+<div class="row show-hide-message">
+  <div [ngClass]="messageClass">
+    {{ message }}
+  </div>
+</div>
 <!-- Registration Form -->
 <form [formGroup]="form" (submit)="onRegisterSubmit()">
 
@@ -39,8 +44,8 @@
       <!-- Validation -->
       <ul class="help-block">
         <li *ngIf="form.controls.password.errors?.required && form.controls.password.dirty">This field is required</li>
-        <li *ngIf="form.controls.password.errors?.minlength && form.controls.password.dirty || form.controls.password.errors?.maxlength && form.controls.password.dirty ">Minimum characters: 8, Maximum characters: 35</li>
-        <li *ngIf="form.controls.password.errors?.validatePassword && form.controls.password.dirty">Password must be at least 8 characters but no more than 35</li>
+        <li *ngIf="(form.controls.password.errors?.minlength && form.controls.password.dirty) || (form.controls.password.errors?.maxlength && form.controls.password.dirty) ">Minimum characters: 8, Maximum characters: 35</li>
+        <li *ngIf="form.controls.password.errors?.validatePassword && form.controls.password.dirty">Password must contain at least 1 uppercase, 1 lowercase, 1 number, and 1 special character</li>
       </ul>
     </div>
   </div>
@@ -59,7 +64,7 @@
   </div>
 
   <!-- Submit Input -->
-  <input [disabled]="!form.valid" type="submit" class="btn btn-primary" value="Submit" />
+  <input [disabled]="!form.valid || processing" type="submit" class="btn btn-primary" value="Submit" />
 
 </form>
 <!-- Registration Form -->
