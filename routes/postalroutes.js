@@ -33,6 +33,7 @@ module.exports = (router) => {
       if (!req.params.postId) {
         res.json({ success: false, message: 'Could not get replies by id because no id was provided'});
       } else {
+        //console.log(req.params.postId);
         Post.find({ 'parentID': req.params.postId }).sort('timeStamp').exec((err, replies) => {
           if (err) {
             res.json({ success: false, message: err });
@@ -123,13 +124,11 @@ module.exports = (router) => {
 
             //save to database
             newPost.save((err) => {
-
               if (err) {
                 res.json({ success: false, message: 'Error creating post: ' + err });
               } else {
                 res.json({ success: true, message: 'Post created' });
               }
-
             });
 
           }

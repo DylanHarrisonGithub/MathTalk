@@ -60,4 +60,11 @@ export class AuthService {
     return this.http.get(this.domain + '/authentication/profile', this.options).map(res => res.json());
   }
 
+  getLatestPosts() {
+    return this.http.get(this.domain + '/postalroutes/latest').map(res => res.json());
+  }
+
+  getPostRepliesByParentId(parentId) {
+    return this.http.get(this.domain + '/postalroutes/replies/' + parentId).map(res => res.json());
+  }
 }
