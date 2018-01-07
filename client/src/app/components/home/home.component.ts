@@ -11,10 +11,16 @@ export class HomeComponent implements OnInit {
 
   posts = [];
   replies = [];
+
   newPostBody: String;
   newPostTitle: String;
+  newReplyBody: String;
+  newReplyTitle: String;
+
   selectedPost = -1;
   activeTarget = null;
+  composePost = false;
+  composeReply = false;
 
   constructor(
     private authService: AuthService,
@@ -36,6 +42,9 @@ export class HomeComponent implements OnInit {
         this.posts = [];
       }
     });
+
+    this.composePost = false;
+    this.composeReply = false;
   }
 
   selectPost(i, event) {
@@ -134,8 +143,61 @@ export class HomeComponent implements OnInit {
 
   }
 
+  newReply() {
+
+    if (!this.authService.loggedIn()) {
+      this.flashMessagesService.show('You must log in to create a new post!', { cssClass: 'alert-danger' });
+    } else {
+      if (false) {
+        //this.flashMessagesService.show('You must provide a post title!', { cssClass: 'alert-danger' });
+      } else {
+        if (this.newPostBody == "") {
+          this.flashMessagesService.show('You cannot create an empty reply!', { cssClass: 'alert-danger' });
+        } else {
+          this.authService.getProfile().subscribe(profile => {
+            const post = {             
+              username: profile.user.username,
+              title: 'replied @' + this.posts[this.selectedPost].username,
+              body: this.newReplyBody,
+              parentID: this.posts[this.selectedPost]._id.toString()
+            }
+
+            this.authService.submitNewPost(post).subscribe(res => {
+              this.flashMessagesService.show('New post created!', { cssClass: 'alert-success' });
+              this.authService.getLatestPosts().subscribe(latest => {
+                if (latest.success) {
+                  this.posts = latest.posts;
+                  //this.selectedPost = -1;
+                  this.newReplyBody = "";
+            
+                  // make timestamps human readable
+                  this.posts.forEach(post => {
+                    const date = new Date((Number(post.timeStamp)));
+                    post.timeStamp = date.toDateString() + ", " + date.toTimeString();
+                  });  
+                } else {
+                  this.posts = [];
+                }
+              });
+            });
+            
+          });       
+        }
+      }
+    }
+
+  }
+
   isSelectedPost(i) {
     return this.selectedPost == i;
+  }
+
+  toggleNewPost() {
+    this.composePost = !this.composePost;
+  }
+
+  toggleNewReply() {
+    this.composeReply = !this.composeReply;
   }
 
 }

@@ -6,13 +6,13 @@
     <div class="list-group">
         
         <!-- new post -->
-        <a *ngIf="authService.loggedIn()" class="list-group-item text-center" role="button">
+        <a *ngIf="authService.loggedIn()" class="list-group-item text-center" role="button" (click)="toggleNewPost();">
             Create new post
         </a>
         <a *ngIf="!authService.loggedIn()" class="list-group-item text-center disabled" role="button">
-            Create new post
+            Login to create a new post
         </a>
-        <div *ngIf="authService.loggedIn()">
+        <div *ngIf="authService.loggedIn() && composePost">
             <div class="list-group-item">
                 <input type="text" placeholder="Title" name="ffdafdafdasname" class="form-control" [(ngModel)]="newPostTitle">
             </div>
@@ -64,12 +64,31 @@
                         </div>
                     </div>
                 </div>
-                <a *ngIf="authService.loggedIn()" class="list-group-item text-center" role="button">
+
+                <!-- create reply -->
+                <a *ngIf="authService.loggedIn()" class="list-group-item text-center" role="button"  (click)="toggleNewReply();">
                     Post your reply
                 </a>
                 <a *ngIf="!authService.loggedIn()" class="list-group-item text-center disabled" role="button">
-                    Post your reply
+                    Login to post your reply
                 </a>
+                <div *ngIf="authService.loggedIn() && composeReply">
+                    <div class="form-horizontal list-group-item">
+                        <textarea style="resize: none;" class="form-control" rows="3" placeholder="Enter a reply.." [(ngModel)]="newReplyBody"></textarea>        
+                        <br>
+                        <div class="text-right">
+                            <a class="btn btn-info btn-sm" (click)="newReply()">Post</a>
+                        </div>
+                    </div>
+                    <div class="list-group-item text-center">
+                        Preview
+                    </div>
+                    <div class="list-group-item text-center">
+                        {{ newReplyBody }}
+                    </div>           
+                </div>
+
+                <!-- reply feed -->
                 <div class="list-group" *ngFor="let reply of replies">            
                     <div class="list-group-item success">
                         <strong>{{ reply.username }}</strong> replied {{ reply.timeStamp }}     
@@ -98,6 +117,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- post footer -->
                 <div class="list-group-item active">
                     &nbsp;
                 </div>
