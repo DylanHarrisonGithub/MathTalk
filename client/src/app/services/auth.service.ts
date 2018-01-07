@@ -67,4 +67,9 @@ export class AuthService {
   getPostRepliesByParentId(parentId) {
     return this.http.get(this.domain + '/postalroutes/replies/' + parentId).map(res => res.json());
   }
+
+  submitNewPost(newPost) {
+    return this.http.post(this.domain + '/postalroutes/newpost', newPost).map(res => res.json());
+  }
+
 }

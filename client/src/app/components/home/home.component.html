@@ -2,18 +2,44 @@
 <h3>$$ \frac{{ '{' }}3x+2{{ '}' }}{{ '{' }}y-7{{ '}' }} $$</h3>
 -->
 
-<!-- new post -->
-<div *ngIf="authService.loggedIn()">
-    make new post
+<div class="bs-component">
+    <div class="list-group">
+        
+        <!-- new post -->
+        <a *ngIf="authService.loggedIn()" class="list-group-item text-center" role="button">
+            Create new post
+        </a>
+        <a *ngIf="!authService.loggedIn()" class="list-group-item text-center disabled" role="button">
+            Create new post
+        </a>
+        <div *ngIf="authService.loggedIn()">
+            <div class="list-group-item">
+                <input type="text" placeholder="Title" name="ffdafdafdasname" class="form-control" [(ngModel)]="newPostTitle">
+            </div>
+            <div class="form-horizontal list-group-item">
+                <textarea style="resize: none;" class="form-control" rows="3" placeholder="What's up?" [(ngModel)]="newPostBody"></textarea>        
+                <br>
+                <div class="text-right">
+                    <a class="btn btn-info btn-sm" (click)="newPost()">Post</a>
+                </div>
+            </div>
+            <div class="list-group-item text-center">
+                Preview
+            </div>
+            <div class="list-group-item text-center">
+                {{ newPostBody }}
+            </div>           
+        </div>
+
+    </div>
 </div>
 
 <!-- post feed -->
 <div class="bs-component">
     <div class="list-group">
 
-
         <div *ngFor="let post of posts; let i = index" >
-            <a href="#" class="list-group-item" (click)="selectPost(i)">
+            <a class="list-group-item" (click)="selectPost(i, $event)" role="button">
                 <span class="badge">{{ post.username }}</span>
                 <h3>{{ post.title }}</h3>
                 {{ post.timeStamp }}     
@@ -38,7 +64,12 @@
                         </div>
                     </div>
                 </div>
-
+                <a *ngIf="authService.loggedIn()" class="list-group-item text-center" role="button">
+                    Post your reply
+                </a>
+                <a *ngIf="!authService.loggedIn()" class="list-group-item text-center disabled" role="button">
+                    Post your reply
+                </a>
                 <div class="list-group" *ngFor="let reply of replies">            
                     <div class="list-group-item success">
                         <strong>{{ reply.username }}</strong> replied {{ reply.timeStamp }}     
@@ -50,20 +81,28 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-md-6">
-                                    likes: {{ reply.likes }} 
+                                    
                                 </div>
                                 <div class="col-md-6">
                                     <span class="pull-right">
-                                        <a href="#" class="btn btn-info btn-sm">Like</a>
+                                        <a href="#" class="btn btn-info btn-sm">
+                                            Like
+                                            <span style="background-color: orange; border-radius: 25px;">
+                                                &nbsp;&nbsp;{{ reply.likes }}&nbsp;&nbsp;
+                                            </span>
+                                        </a>
                                     </span>
                                 </div>
+
                             </div>
                         </div>
                     </div>
-                </div> 
+                </div>
+                <div class="list-group-item active">
+                    &nbsp;
+                </div>
 
             </div>
         </div>
     </div>
 </div>
-

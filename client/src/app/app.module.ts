@@ -4,6 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { FlashMessagesModule } from 'angular2-flash-messages';
+import { FormsModule } from '@angular/forms';
 
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
@@ -32,7 +33,8 @@ import { ProfileComponent } from './components/profile/profile.component';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpModule,
-    FlashMessagesModule
+    FlashMessagesModule,
+    FormsModule
   ],
   providers: [
     AuthService,
