@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { FlashMessagesService } from 'angular2-flash-messages'
+import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-home',
@@ -9,6 +9,7 @@ import { FlashMessagesService } from 'angular2-flash-messages'
 })
 export class HomeComponent implements OnInit {
 
+  //MathJax: any;
   posts = [];
   replies = [];
 
@@ -28,6 +29,7 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    
     this.authService.getLatestPosts().subscribe(latest => {
       if (latest.success) {
         this.posts = latest.posts;
@@ -198,6 +200,11 @@ export class HomeComponent implements OnInit {
 
   toggleNewReply() {
     this.composeReply = !this.composeReply;
+  }
+
+  doSomething(e) {
+    //console.log('you changed');
+    //this.MathJax.Hub.Queue(["Typeset", this.MathJax.Hub, e]);
   }
 
 }

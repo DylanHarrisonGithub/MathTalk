@@ -17,7 +17,7 @@
                 <input type="text" placeholder="Title" name="ffdafdafdasname" class="form-control" [(ngModel)]="newPostTitle">
             </div>
             <div class="form-horizontal list-group-item">
-                <textarea style="resize: none;" class="form-control" rows="3" placeholder="What's up?" [(ngModel)]="newPostBody"></textarea>        
+                <textarea style="resize: none;" class="form-control" id="mathtalk-preview-input" rows="3" placeholder="What's up?" [(ngModel)]="newPostBody" (ngModelChange)="doSomething($event)"></textarea>        
                 <br>
                 <div class="text-right">
                     <a class="btn btn-info btn-sm" (click)="newPost()">Post</a>
@@ -26,8 +26,8 @@
             <div class="list-group-item text-center">
                 Preview
             </div>
-            <div class="list-group-item text-center">
-                {{ newPostBody }}
+            <div class="list-group-item text-center" id="mathtalk-preview-output">
+                <!--{{ newPostBody }}-->
             </div>           
         </div>
 
@@ -46,7 +46,7 @@
             </a>
             <div *ngIf="isSelectedPost(i)">
 
-                <div class="list-group-item">
+                <div class="list-group-item" id="mathtalk-post-body">
                     {{ post.body }}
                 </div>
 
@@ -83,7 +83,7 @@
                     <div class="list-group-item text-center">
                         Preview
                     </div>
-                    <div class="list-group-item text-center">
+                    <div class="list-group-item text-center mathtalk-preview-output">
                         {{ newReplyBody }}
                     </div>           
                 </div>
