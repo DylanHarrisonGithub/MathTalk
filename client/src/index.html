@@ -36,15 +36,19 @@
         //console.log(event.target.lastElementChild);
         if (event.target.lastElementChild) {
           if (event.target.lastElementChild.id == 'mathtalk-preview-output') {
-
             //console.log('it happened');
             $('#mathtalk-preview-input').on('change keyup paste', function(event2) {
               //console.log(jQuery._data( event2.target, "events" ));
               document.getElementById('mathtalk-preview-output').innerHTML = document.getElementById('mathtalk-preview-input').value;
               MathJax.Hub.Queue(["Typeset", MathJax.Hub], document.getElementById('mathtalk-preview-output'));
-              //$(event2.target).removeClass('mathtalk-preview-output');
             });
-
+          } else {
+            if (event.target.lastElementChild.id == 'mathtalk-reply-preview-output') {
+              $('#mathtalk-reply-preview-input').on('change keyup paste', function(event2) {
+                document.getElementById('mathtalk-reply-preview-output').innerHTML = document.getElementById('mathtalk-reply-preview-input').value;
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub], document.getElementById('mathtalk-reply-preview-output'));
+              });
+            }            
           }
         }
 

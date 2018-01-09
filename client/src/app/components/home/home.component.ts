@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit {
     }
 
     if (this.activeTarget) {
-      this.activeTarget.className = "list-group-item";
+      this.activeTarget.className = "list-group-item btn btn-info";
       eventTarget.className = "list-group-item active";
     } else {
       eventTarget.className = "list-group-item active";
@@ -67,15 +67,15 @@ export class HomeComponent implements OnInit {
     if (this.selectedPost == i) {
       this.selectedPost = -1;
       this.replies = [];
-      eventTarget.className = "list-group-item"
+      eventTarget.className = "list-group-item btn btn-info"
       if (this.activeTarget) {
-        this.activeTarget.className = "list-group-item";
+        this.activeTarget.className = "list-group-item btn btn-info";
         this.activeTarget = null;
       }
     } else {
       this.selectedPost = i;
       if (this.activeTarget) {
-        this.activeTarget.className = "list-group-item";
+        this.activeTarget.className = "list-group-item btn btn-info";
       }
       eventTarget.className = "list-group-item active"
       this.activeTarget = eventTarget;

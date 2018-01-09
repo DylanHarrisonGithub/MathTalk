@@ -39,7 +39,7 @@
     <div class="list-group">
 
         <div *ngFor="let post of posts; let i = index" >
-            <a class="list-group-item" (click)="selectPost(i, $event)" role="button">
+            <a class="list-group-item btn btn-info" (click)="selectPost(i, $event)" role="button">
                 <span class="badge">{{ post.username }}</span>
                 <h3>{{ post.title }}</h3>
                 {{ post.timeStamp }}     
@@ -66,15 +66,22 @@
                 </div>
 
                 <!-- create reply -->
-                <a *ngIf="authService.loggedIn()" class="list-group-item text-center" role="button"  (click)="toggleNewReply();">
+                <a *ngIf="authService.loggedIn()"
+                    class="list-group-item text-center btn btn-info"
+                    role="button"
+                    (click)="toggleNewReply();"
+                    style="background-color: #428bca; color: white;">
                     Post your reply
                 </a>
-                <a *ngIf="!authService.loggedIn()" class="list-group-item text-center disabled" role="button">
+                <a *ngIf="!authService.loggedIn()"
+                    class="list-group-item text-center disabled btn btn-info" 
+                    role="button"
+                    style="background-color:#428bca; color:white;">
                     Login to post your reply
                 </a>
                 <div *ngIf="authService.loggedIn() && composeReply">
                     <div class="form-horizontal list-group-item">
-                        <textarea style="resize: none;" class="form-control" rows="3" placeholder="Enter a reply.." [(ngModel)]="newReplyBody"></textarea>        
+                        <textarea id="mathtalk-reply-preview-input" style="resize: none;" class="form-control" rows="3" placeholder="Enter a reply.." [(ngModel)]="newReplyBody"></textarea>        
                         <br>
                         <div class="text-right">
                             <a class="btn btn-info btn-sm" (click)="newReply()">Post</a>
@@ -83,8 +90,8 @@
                     <div class="list-group-item text-center">
                         Preview
                     </div>
-                    <div class="list-group-item text-center mathtalk-preview-output">
-                        {{ newReplyBody }}
+                    <div id="mathtalk-reply-preview-output" class="list-group-item text-center mathtalk-preview-output">
+                        <!--{{ newReplyBody }}-->
                     </div>           
                 </div>
 
