@@ -84,7 +84,7 @@ export class HomeComponent implements OnInit {
           //console.log(this.posts[this.selectedPost]._id);
           this.authService.getPostRepliesByParentId(this.posts[this.selectedPost]._id.toString()).subscribe(postReplies => {          
             if (postReplies.success) {
-              console.log(postReplies);   
+              //console.log(postReplies);   
               this.replies = postReplies.replies;
   
               this.replies.forEach(post => {
@@ -92,7 +92,7 @@ export class HomeComponent implements OnInit {
                 post.timeStamp = date.toDateString() + ", " + date.toTimeString();
               }); 
             } else {
-              console.log('could not get replies: ' + postReplies.message);
+              //console.log('could not get replies: ' + postReplies.message);
               this.replies = [];
             }
           });

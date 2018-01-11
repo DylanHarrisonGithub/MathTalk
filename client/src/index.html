@@ -10,11 +10,6 @@
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
-        
-  <!-- Latest compiled and minified bootstrap CSS -->
-  <!--
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  -->
 
   <!-- bootswatch -->
   <link rel="stylesheet" href="https://bootswatch.com/3/flatly/bootstrap.min.css">
@@ -25,51 +20,11 @@
   <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
   <!-- mathjs cdn -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.18.1/math.js'></script>
+  <!-- function plots cdn -->
+  <script src="https://wzrd.in/standalone/function-plot@1.14.0"></script>
 
-  <script>
-    var targets = [];
-    function mathtalkInit() {
-      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-
-      $(document).on('DOMNodeInserted', function(event) {
-        
-        //console.log(event.target.lastElementChild);
-        if (event.target.lastElementChild) {
-          if (event.target.lastElementChild.id == 'mathtalk-preview-output') {
-            //console.log('it happened');
-            $('#mathtalk-preview-input').on('change keyup paste', function(event2) {
-              //console.log(jQuery._data( event2.target, "events" ));
-              document.getElementById('mathtalk-preview-output').innerHTML = document.getElementById('mathtalk-preview-input').value;
-              MathJax.Hub.Queue(["Typeset", MathJax.Hub], document.getElementById('mathtalk-preview-output'));
-            });
-          } else {
-            if (event.target.lastElementChild.id == 'mathtalk-reply-preview-output') {
-              $('#mathtalk-reply-preview-input').on('change keyup paste', function(event2) {
-                document.getElementById('mathtalk-reply-preview-output').innerHTML = document.getElementById('mathtalk-reply-preview-input').value;
-                MathJax.Hub.Queue(["Typeset", MathJax.Hub], document.getElementById('mathtalk-reply-preview-output'));
-              });
-            }            
-          }
-        }
-
-        if (document.getElementById('mathtalk-post-body')) {
-          if (!($('#mathtalk-post-body').hasClass('mathtalk-finished-rendering'))) {
-            $('#mathtalk-post-body').addClass('mathtalk-finished-rendering');
-            console.log('found mathtalk-post-body');
-            //let the browser finish rendering
-            setTimeout(function() {
-              MathJax.Hub.Queue(["Typeset", MathJax.Hub], document.getElementById('mathtalk-post-body'));
-            }, 500);           
-          }
-        }
-
-      });
-
-      function findElementWithIdInList(list, element) {
-
-      }
-    }    
-  </script>
+  <script src="plot.js"></script>
+  <script src="mathtalk.js"></script>
 
 </head>
 <body onload="mathtalkInit();">

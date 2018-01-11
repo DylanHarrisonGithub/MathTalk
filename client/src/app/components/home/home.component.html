@@ -6,18 +6,30 @@
     <div class="list-group">
         
         <!-- new post -->
-        <a *ngIf="authService.loggedIn()" class="list-group-item text-center" role="button" (click)="toggleNewPost();">
-            Create new post
-        </a>
-        <a *ngIf="!authService.loggedIn()" class="list-group-item text-center disabled" role="button">
-            Login to create a new post
-        </a>
+        <div class="list-group-item" style="margin:0px; padding: 0px;">
+            <button *ngIf="authService.loggedIn()" 
+                class="btn btn-info btn-block" 
+                (click)="toggleNewPost();">
+                Create new post
+            </button>
+            <button *ngIf="!authService.loggedIn()"
+                class="btn btn-info btn-block disabled">
+                Login to create a new post
+            </button>
+        </div>
         <div *ngIf="authService.loggedIn() && composePost">
             <div class="list-group-item">
                 <input type="text" placeholder="Title" name="ffdafdafdasname" class="form-control" [(ngModel)]="newPostTitle">
             </div>
             <div class="form-horizontal list-group-item">
-                <textarea style="resize: none;" class="form-control" id="mathtalk-preview-input" rows="3" placeholder="What's up?" [(ngModel)]="newPostBody" (ngModelChange)="doSomething($event)"></textarea>        
+                <textarea 
+                    style="resize: none;" 
+                    class="form-control" 
+                    id="mathtalk-preview-input" 
+                    rows="3" placeholder="What's up?" 
+                    [(ngModel)]="newPostBody" 
+                    (ngModelChange)="doSomething($event)">
+                </textarea>        
                 <br>
                 <div class="text-right">
                     <a class="btn btn-info btn-sm" (click)="newPost()">Post</a>
@@ -26,7 +38,7 @@
             <div class="list-group-item text-center">
                 Preview
             </div>
-            <div class="list-group-item text-center" id="mathtalk-preview-output">
+            <div class="list-group-item" id="mathtalk-preview-output">
                 <!--{{ newPostBody }}-->
             </div>           
         </div>
@@ -46,39 +58,43 @@
             </a>
             <div *ngIf="isSelectedPost(i)">
 
-                <div class="list-group-item" id="mathtalk-post-body">
-                    {{ post.body }}
+                <div class="list-group-item" id="mathtalk-post-body" [innerHTML]="post.body">
+                    <!--{{ post.body }}-->
                 </div>
 
                 <div class="list-group-item">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-6">
-                                likes: {{ post.likes }} 
+                                
                             </div>
                             <div class="col-md-6">
                                 <span class="pull-right">
-                                    <a href="#" class="btn btn-info btn-sm">Like</a>
+                                    <a href="#" class="btn btn-info btn-sm">
+                                        Like
+                                        <span style="background-color: orange; border-radius: 25px;">
+                                            &nbsp;&nbsp;{{ post.likes }}&nbsp;&nbsp;
+                                        </span>
+                                    </a>
                                 </span>
                             </div>
+
                         </div>
                     </div>
                 </div>
 
-                <!-- create reply -->
-                <a *ngIf="authService.loggedIn()"
-                    class="list-group-item text-center btn btn-info"
-                    role="button"
-                    (click)="toggleNewReply();"
-                    style="background-color: #428bca; color: white;">
-                    Post your reply
-                </a>
-                <a *ngIf="!authService.loggedIn()"
-                    class="list-group-item text-center disabled btn btn-info" 
-                    role="button"
-                    style="background-color:#428bca; color:white;">
-                    Login to post your reply
-                </a>
+                <!-- new post -->
+                <div class="list-group-item" style="margin:0px; padding: 0px;">
+                    <button *ngIf="authService.loggedIn()" 
+                        class="btn btn-info btn-block" 
+                        (click)="toggleNewReply();">
+                        Post your reply
+                    </button>
+                    <button *ngIf="!authService.loggedIn()"
+                        class="btn btn-info btn-block disabled">
+                        Login to post your reply
+                    </button>
+                </div>
                 <div *ngIf="authService.loggedIn() && composeReply">
                     <div class="form-horizontal list-group-item">
                         <textarea id="mathtalk-reply-preview-input" style="resize: none;" class="form-control" rows="3" placeholder="Enter a reply.." [(ngModel)]="newReplyBody"></textarea>        
@@ -90,7 +106,7 @@
                     <div class="list-group-item text-center">
                         Preview
                     </div>
-                    <div id="mathtalk-reply-preview-output" class="list-group-item text-center mathtalk-preview-output">
+                    <div id="mathtalk-reply-preview-output" class="list-group-item mathtalk-preview-output">
                         <!--{{ newReplyBody }}-->
                     </div>           
                 </div>
@@ -100,8 +116,8 @@
                     <div class="list-group-item success">
                         <strong>{{ reply.username }}</strong> replied {{ reply.timeStamp }}     
                     </div>
-                    <div class="list-group-item">
-                        {{ reply.body }}
+                    <div class="list-group-item" [innerHTML]="reply.body">
+                        <!--{{ reply.body }}-->
                     </div>
                     <div class="list-group-item">
                         <div class="container-fluid">
