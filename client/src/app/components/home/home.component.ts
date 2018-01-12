@@ -114,10 +114,15 @@ export class HomeComponent implements OnInit {
           this.flashMessagesService.show('You cannot create an empty post!', { cssClass: 'alert-danger' });
         } else {
           this.authService.getProfile().subscribe(profile => {
+
+            //hashtag regex
+            var hashRegEx = /\#(\S)*/g
+
             const post = {             
               username: profile.user.username,
               title: this.newPostTitle,
-              body: this.newPostBody
+              body: this.newPostBody,
+              meta: this.newPostBody.match(hashRegEx)
             }
 
             this.authService.submitNewPost(post).subscribe(res => {
@@ -157,11 +162,16 @@ export class HomeComponent implements OnInit {
           this.flashMessagesService.show('You cannot create an empty reply!', { cssClass: 'alert-danger' });
         } else {
           this.authService.getProfile().subscribe(profile => {
+
+            //hashtag regex
+            var hashRegEx = /\#(\S)*/g
+
             const post = {             
               username: profile.user.username,
               title: 'replied @' + this.posts[this.selectedPost].username,
               body: this.newReplyBody,
-              parentID: this.posts[this.selectedPost]._id.toString()
+              parentID: this.posts[this.selectedPost]._id.toString(),
+              meta: this.newPostBody.match(hashRegEx)
             }
 
             this.authService.submitNewPost(post).subscribe(res => {

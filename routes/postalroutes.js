@@ -94,15 +94,9 @@ module.exports = (router) => {
           if (!req.body.body) {
             res.json( {success: false, message: 'Post has no body' });
           } else {
-                        // check for html script tags in body
-/*             if (hasscripts) {
-              res.json( { success: false, message: 'Post contains script tag'});
-              // ban user
-            } */
-
             var hashtags = [];
             if (req.body.meta) {
-              hashtags = req.body.meta.toString().split(' ');
+              hashtags = req.body.meta;
             }
 
             var parent = '';

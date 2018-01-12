@@ -15,7 +15,7 @@ const postSchema = new Schema({
     timeStamp: { type: String, required: true, unique: false, lowercase: false, validate: timeStampValidators },
     title: { type: String, required: true, unique: false, lowercase: false, validate: titleValidators },
     body: { type: String, required: true, unique: false, lowercase: false, validate: bodyValidators },
-    meta: { type: [String], required: false, unique: false, lowercase: false, validate: metaValidators },
+    meta: [{ type: String, required: false, unique: false, lowercase: false, validate: metaValidators }],
     likes: { type: Number, required: true },
     parentID: { type: String, required: false },
     replies: { type: [String], required: false }

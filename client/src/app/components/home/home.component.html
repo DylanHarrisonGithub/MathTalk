@@ -50,6 +50,12 @@
 <div class="bs-component">
     <div class="list-group">
 
+        <!-- search bar -->
+        <div class="list-group-item">
+            <input type="text" class="form-control" placeholder="Search"> 
+        </div>
+
+        <!-- feed -->
         <div *ngFor="let post of posts; let i = index" >
             <a class="list-group-item btn btn-info" (click)="selectPost(i, $event)" role="button">
                 <span class="badge">{{ post.username }}</span>
