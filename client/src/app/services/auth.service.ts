@@ -64,6 +64,10 @@ export class AuthService {
     return this.http.get(this.domain + '/postalroutes/latest').map(res => res.json());
   }
 
+  getPostsByQuery(query) {
+    return this.http.get(this.domain + '/postalroutes/query/' + query).map(res => res.json());
+  }
+
   getPostRepliesByParentId(parentId) {
     return this.http.get(this.domain + '/postalroutes/replies/' + parentId).map(res => res.json());
   }

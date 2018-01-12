@@ -52,9 +52,12 @@
 
         <!-- search bar -->
         <div class="list-group-item">
-            <input type="text" class="form-control" placeholder="Search"> 
+            <input type="text" class="form-control" placeholder="Search" (input)="query()" [(ngModel)]="queryString"> 
         </div>
 
+        <div class="list-group-item" *ngIf="posts.length == 0">
+            No Posts
+        </div>
         <!-- feed -->
         <div *ngFor="let post of posts; let i = index" >
             <a class="list-group-item btn btn-info" (click)="selectPost(i, $event)" role="button">

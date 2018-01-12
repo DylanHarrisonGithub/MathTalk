@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
   newPostTitle: String;
   newReplyBody: String;
   newReplyTitle: String;
+  queryString: String;
 
   selectedPost = -1;
   activeTarget = null;
@@ -210,6 +211,41 @@ export class HomeComponent implements OnInit {
 
   toggleNewReply() {
     this.composeReply = !this.composeReply;
+  }
+
+  query() {
+    if (this.queryString == '') {
+      this.authService.getLatestPosts().subscribe(latest => {
+        if (latest.success) {
+          this.posts = latest.posts;
+          this.selectedPost = -1;
+    
+          // make timestamps human readable
+          this.posts.forEach(post => {
+            const date = new Date((Number(post.timeStamp)));
+            post.timeStamp = date.toDateString() + ", " + date.toTimeString();
+          });  
+        } else {
+          this.posts = [];
+        }
+      });
+    } else {
+      this.authService.getPostsByQuery(this.queryString).subscribe(latest => {
+        if (latest.success) {
+          this.posts = latest.posts;
+          this.selectedPost = -1;
+    
+          // make timestamps human readable
+          this.posts.forEach(post => {
+            const date = new Date((Number(post.timeStamp)));
+            post.timeStamp = date.toDateString() + ", " + date.toTimeString();
+          });  
+        } else {
+          this.posts = [];
+        }
+      }); 
+    }
+   
   }
 
   doSomething(e) {

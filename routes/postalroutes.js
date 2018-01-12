@@ -63,6 +63,20 @@ module.exports = (router) => {
       });
     });
 
+    router.get('/query/:query', (req, res) => {
+      Post.find({ 'parentID': '', 'meta': "#"+req.params.query}).sort('-timeStamp').limit(10).exec((err, posts) => {
+        if (err) {
+          res.json({ success: false, message: err });
+        } else {
+          if (!posts) {
+            res.json({ success: false, message: 'No matches for that query.' });
+          } else {
+            res.json({ success: true, posts: posts });
+          }
+        }        
+      });
+    });
+
     // routes that dont need token go above here
 /*     router.use((req, res, next) => {
       const token = req.headers['authorization'];
