@@ -172,7 +172,7 @@ export class HomeComponent implements OnInit {
               title: 'replied @' + this.posts[this.selectedPost].username,
               body: this.newReplyBody,
               parentID: this.posts[this.selectedPost]._id.toString(),
-              meta: this.newPostBody.match(hashRegEx)
+              meta: this.newReplyBody.match(hashRegEx)
             }
 
             this.authService.submitNewPost(post).subscribe(res => {
