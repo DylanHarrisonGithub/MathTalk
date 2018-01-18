@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
   newPostTitle: String;
   newReplyBody: String;
   newReplyTitle: String;
-  queryString: String;
+  queryString: '';
 
   selectedPost = -1;
   activeTarget = null;
@@ -33,43 +33,22 @@ export class HomeComponent implements OnInit {
     private flashMessagesService: FlashMessagesService
   ) { }
 
-  // detect scroll to bottom of page
+  // detect scroll to bottom of page for infinite wall effect
   @HostListener('window:scroll', ['$event']) onScrollEvent($event) {
 
     // cross-browser compatible position of top of window over document
-    const verticalOffset = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    
+    const verticalOffset = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;    
     // cross-browser compatible max vertical offset
     const limit = Math.max( document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight ) - window.innerHeight;
-    
-    // console.log(verticalOffset);
+
     if ((limit - verticalOffset) == 0) {
-      console.log('scrolled to bottom of page!');
-      this.getNextTenPostsByTimeStamp(this.oldestTimeStamp);
+      //console.log('scrolled to bottom of page!');
+      this.getNextTenPostsByTimeStampAndQuery(this.oldestTimeStamp, this.queryString);
     }
   } 
 
   ngOnInit() {
-    
-    this.authService.getLatestPosts().subscribe(latest => {
-      if (latest.success) {
-        this.posts = latest.posts;
-        this.selectedPost = -1;
-  
-          // save oldest timestamp
-          if (latest.posts.length > 0) {
-            this.oldestTimeStamp = latest.posts[latest.posts.length - 1].timeStamp;
-          }
-        // make timestamps human readable
-        this.posts.forEach(post => {
-          const date = new Date((Number(post.timeStamp)));
-          post.timeStamp = date.toDateString() + ", " + date.toTimeString();
-        });  
-      } else {
-        this.posts = [];
-      }
-    });
-
+    this.getNextTenPostsByTimeStampAndQuery(this.oldestTimeStamp, this.queryString);
     this.composePost = false;
     this.composeReply = false;
   }
@@ -104,25 +83,7 @@ export class HomeComponent implements OnInit {
       }
       eventTarget.className = "list-group-item active"
       this.activeTarget = eventTarget;
-      if (this.posts) {
-        if (this.posts[this.selectedPost]) {
-          //console.log(this.posts[this.selectedPost]._id);
-          this.authService.getPostRepliesByParentId(this.posts[this.selectedPost]._id.toString()).subscribe(postReplies => {          
-            if (postReplies.success) {
-              //console.log(postReplies);   
-              this.replies = postReplies.replies;
-  
-              this.replies.forEach(post => {
-                const date = new Date((Number(post.timeStamp)));
-                post.timeStamp = date.toDateString() + ", " + date.toTimeString();
-              }); 
-            } else {
-              //console.log('could not get replies: ' + postReplies.message);
-              this.replies = [];
-            }
-          });
-        }
-      }
+      this.getRepliesToSelectedPost();
     }
 
   }
@@ -152,24 +113,9 @@ export class HomeComponent implements OnInit {
 
             this.authService.submitNewPost(post).subscribe(res => {
               this.flashMessagesService.show('New post created!', { cssClass: 'alert-success' });
-              this.authService.getLatestPosts().subscribe(latest => {
-                if (latest.success) {
-                  this.posts = latest.posts;
-                  this.selectedPost = -1;
-    
-                  // save oldest timestamp
-                  if (latest.posts.length > 0) {
-                    this.oldestTimeStamp = latest.posts[latest.posts.length - 1].timeStamp;
-                  }        
-                  // make timestamps human readable
-                  this.posts.forEach(post => {
-                    const date = new Date((Number(post.timeStamp)));
-                    post.timeStamp = date.toDateString() + ", " + date.toTimeString();
-                  });  
-                } else {
-                  this.posts = [];
-                }
-              });
+              this.oldestTimeStamp = Number.MAX_SAFE_INTEGER;
+              this.posts = [];
+              this.getNextTenPostsByTimeStampAndQuery(this.oldestTimeStamp, this.queryString);
             });
             
           });       
@@ -205,21 +151,7 @@ export class HomeComponent implements OnInit {
 
             this.authService.submitNewPost(post).subscribe(res => {
               this.flashMessagesService.show('New post created!', { cssClass: 'alert-success' });
-              this.authService.getLatestPosts().subscribe(latest => {
-                if (latest.success) {
-                  this.posts = latest.posts;
-                  //this.selectedPost = -1;
-                  this.newReplyBody = "";
-              
-                  // make timestamps human readable
-                  this.posts.forEach(post => {
-                    const date = new Date((Number(post.timeStamp)));
-                    post.timeStamp = date.toDateString() + ", " + date.toTimeString();
-                  });  
-                } else {
-                  this.posts = [];
-                }
-              });
+              this.getRepliesToSelectedPost();
             });
             
           });       
@@ -241,79 +173,55 @@ export class HomeComponent implements OnInit {
     this.composeReply = !this.composeReply;
   }
 
-  getNextTenPostsByTimeStamp(timestamp) {
-    this.authService.getLatestOlderThanTimeStamp(timestamp).subscribe(latest => {
+  getNextTenPostsByTimeStampAndQuery(timestamp, query) {
 
-      if (latest.success) {
+    this.authService.getLatestOlderThanTimeStampWithQuery(timestamp, query).subscribe(res => {
+      if (res.success) {
+        // save oldest timestamp
+        if (res.posts.length > 0) {
+          this.oldestTimeStamp = res.posts[res.posts.length - 1].timeStamp;
+        }
 
-          // save oldest timestamp
-          if (latest.posts.length > 0) {
-            this.oldestTimeStamp = latest.posts[latest.posts.length - 1].timeStamp;
-          }
+        // make human readable
+        res.posts.forEach(post => {
+          const date = new Date((Number(post.timeStamp)));
+          post.timeStamp = date.toDateString() + ", " + date.toTimeString();
+        });
 
-          // make human readable
-          latest.posts.forEach(post => {
-            const date = new Date((Number(post.timeStamp)));
-            post.timeStamp = date.toDateString() + ", " + date.toTimeString();
-          });
-
-          // append to posts
-          this.posts = this.posts.concat(latest.posts);
-          console.log('success', latest.posts);
-
+        // append to posts
+        this.posts = this.posts.concat(res.posts);
+        console.log('success', res.posts);       
       } else {
-        console.log(latest);
+        console.log('Error retrieving posts', res);
       }
-
     });
+
+  }
+
+  getRepliesToSelectedPost() {
+    if (this.posts) {
+      if (this.posts[this.selectedPost]) {
+        this.authService.getPostRepliesByParentId(this.posts[this.selectedPost]._id.toString()).subscribe(postReplies => {          
+          if (postReplies.success) { 
+            this.replies = postReplies.replies;
+
+            // make timestamps readable
+            this.replies.forEach(post => {
+              const date = new Date((Number(post.timeStamp)));
+              post.timeStamp = date.toDateString() + ", " + date.toTimeString();
+            }); 
+          } else {
+            this.replies = [];
+          }
+        });
+      }
+    }    
   }
 
   query() {
-    if (this.queryString == '') {
-      this.authService.getLatestPosts().subscribe(latest => {
-        if (latest.success) {
-          this.posts = latest.posts;
-          this.selectedPost = -1;
-    
-          // save oldest timestamp
-          if (this.posts.length > 0) {
-            this.oldestTimeStamp = this.posts[this.posts.length - 1].timeStamp;
-          }
-          // make timestamps human readable
-          this.posts.forEach(post => {
-            const date = new Date((Number(post.timeStamp)));
-            post.timeStamp = date.toDateString() + ", " + date.toTimeString();
-          });  
-        } else {
-          this.posts = [];
-        }
-      });
-    } else {
-      this.authService.getPostsByQuery(this.queryString).subscribe(latest => {
-        if (latest.success) {
-          this.posts = latest.posts;
-          this.selectedPost = -1;
-    
-          // save oldest timestamp
-          if (this.posts.length > 0) {
-            this.oldestTimeStamp = this.posts[this.posts.length - 1].timeStamp;
-          }  
-          // make timestamps human readable
-          this.posts.forEach(post => {
-            const date = new Date((Number(post.timeStamp)));
-            post.timeStamp = date.toDateString() + ", " + date.toTimeString();
-          });  
-        } else {
-          this.posts = [];
-        }
-      }); 
-    }
-   
-  }
-
-  doSomething(e) {
-    //console.log('you changed');
-    //this.MathJax.Hub.Queue(["Typeset", this.MathJax.Hub, e]);
+    this.oldestTimeStamp = Number.MAX_SAFE_INTEGER;
+    this.posts = [];
+    this.getNextTenPostsByTimeStampAndQuery(this.oldestTimeStamp, this.queryString);
   }
 
 }

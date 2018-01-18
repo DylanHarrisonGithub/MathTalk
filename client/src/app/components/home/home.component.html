@@ -27,8 +27,7 @@
                     class="form-control" 
                     id="mathtalk-preview-input" 
                     rows="3" placeholder="What's up?" 
-                    [(ngModel)]="newPostBody" 
-                    (ngModelChange)="doSomething($event)">
+                    [(ngModel)]="newPostBody">
                 </textarea>        
                 <br>
                 <div class="text-right">
@@ -52,7 +51,7 @@
 
         <!-- search bar -->
         <div class="list-group-item">
-            <input type="text" class="form-control" placeholder="Search" (input)="query()" [(ngModel)]="queryString"> 
+            <input type="text" class="form-control" placeholder="Filter" (input)="query()" [(ngModel)]="queryString"> 
         </div>
 
         <div class="list-group-item" *ngIf="posts.length == 0">

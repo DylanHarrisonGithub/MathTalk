@@ -5,10 +5,6 @@ const config = require('../config/database');
 
 module.exports = (router) => {
 
-    router.get('/test', (req, res) => {
-        res.json({ success: true, message: "postalroutes work!"});
-    });
-
     // find one post by id
     router.get('/id/:postId', (req, res) => {
       if (!req.params.postId) {
@@ -48,49 +44,32 @@ module.exports = (router) => {
       }
     });
 
-    // get 10 latest posts
-    router.get('/latest', (req, res) => {
-      Post.find({ 'parentID': '' }).sort('-timeStamp').limit(10).exec((err, posts) => {
-        if (err) {
-          res.json({ success: false, message: err });
-        } else {
-          if (!posts) {
-            res.json({ success: false, message: 'No recent posts' });
-          } else {
-            res.json({ success: true, posts: posts });
+    // get next ten posts by oldest timestamp and query filter
+    router.post('/nextquery', (req, res) => {
+      if (req.body.timestamp) {
+        var mongoQuery = {
+          'parentID': '',
+          timeStamp: { $lt: req.body.timestamp }
+        }
+        if (req.body.query) {
+          if (req.body.query != '') {
+            mongoQuery['meta'] = "#"+req.body.query
           }
         }
-      });
-    });
-
-    // get 10 latest posts prior to timestamp
-    router.get('/next/:timestamp', (req, res) => {
-      Post.find({ 'parentID': '', timeStamp: { $lt: req.params.timestamp }}).sort('-timeStamp').limit(10).exec((err, posts) => {
-        if (err) {
-          res.json({ success: false, message: err });
-        } else {
-          if (!posts) {
-            res.json({ success: false, message: 'No recent posts' });
+        Post.find(mongoQuery).sort('-timeStamp').limit(10).exec((err, posts) => {
+          if (err) {
+            res.json({ success: false, message: err });
           } else {
-            res.json({ success: true, posts: posts });
-          }
-        }        
-      });
-    });
-
-    // get latest 10 by hashtag query
-    router.get('/query/:query', (req, res) => {
-      Post.find({ 'parentID': '', 'meta': "#"+req.params.query}).sort('-timeStamp').limit(10).exec((err, posts) => {
-        if (err) {
-          res.json({ success: false, message: err });
-        } else {
-          if (!posts) {
-            res.json({ success: false, message: 'No matches for that query.' });
-          } else {
-            res.json({ success: true, posts: posts });
-          }
-        }        
-      });
+            if (!posts) {
+              res.json({ success: false, message: 'No recent posts' });
+            } else {
+              res.json({ success: true, posts: posts });
+            }
+          } 
+        });   
+      } else {
+        res.json({ success: false, message: 'Could not retrieve posts. Timestamp was not defined' });
+      }
     });
 
     // routes that dont need token go above here

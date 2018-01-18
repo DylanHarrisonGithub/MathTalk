@@ -60,16 +60,12 @@ export class AuthService {
     return this.http.get(this.domain + '/authentication/profile', this.options).map(res => res.json());
   }
 
-  getLatestPosts() {
-    return this.http.get(this.domain + '/postalroutes/latest').map(res => res.json());
-  }
-
-  getPostsByQuery(query) {
-    return this.http.get(this.domain + '/postalroutes/query/' + query).map(res => res.json());
-  }
-
-  getLatestOlderThanTimeStamp(timeStamp) {
-    return this.http.get(this.domain + '/postalroutes/next/' + timeStamp).map(res => res.json());
+  getLatestOlderThanTimeStampWithQuery(timeStamp, query) {
+    const jsonData = {
+      'timestamp': timeStamp,
+      'query': query
+    }
+    return this.http.post(this.domain + '/postalroutes/nextquery', jsonData).map(res => res.json());
   }
 
   getPostRepliesByParentId(parentId) {
