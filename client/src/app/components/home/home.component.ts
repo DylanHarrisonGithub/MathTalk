@@ -24,6 +24,9 @@ export class HomeComponent implements OnInit {
   activeTarget = null;
   composePost = false;
   composeReply = false;
+  
+  // this will break someday when timestamps exceed max_safe_int
+  oldestTimeStamp = Number.MAX_SAFE_INTEGER;
 
   constructor(
     private authService: AuthService,
@@ -42,6 +45,7 @@ export class HomeComponent implements OnInit {
     // console.log(verticalOffset);
     if ((limit - verticalOffset) == 0) {
       console.log('scrolled to bottom of page!');
+      this.getNextTenPostsByTimeStamp(this.oldestTimeStamp);
     }
   } 
 
@@ -52,6 +56,10 @@ export class HomeComponent implements OnInit {
         this.posts = latest.posts;
         this.selectedPost = -1;
   
+          // save oldest timestamp
+          if (latest.posts.length > 0) {
+            this.oldestTimeStamp = latest.posts[latest.posts.length - 1].timeStamp;
+          }
         // make timestamps human readable
         this.posts.forEach(post => {
           const date = new Date((Number(post.timeStamp)));
@@ -148,7 +156,11 @@ export class HomeComponent implements OnInit {
                 if (latest.success) {
                   this.posts = latest.posts;
                   this.selectedPost = -1;
-            
+    
+                  // save oldest timestamp
+                  if (latest.posts.length > 0) {
+                    this.oldestTimeStamp = latest.posts[latest.posts.length - 1].timeStamp;
+                  }        
                   // make timestamps human readable
                   this.posts.forEach(post => {
                     const date = new Date((Number(post.timeStamp)));
@@ -198,7 +210,7 @@ export class HomeComponent implements OnInit {
                   this.posts = latest.posts;
                   //this.selectedPost = -1;
                   this.newReplyBody = "";
-            
+              
                   // make timestamps human readable
                   this.posts.forEach(post => {
                     const date = new Date((Number(post.timeStamp)));
@@ -229,6 +241,33 @@ export class HomeComponent implements OnInit {
     this.composeReply = !this.composeReply;
   }
 
+  getNextTenPostsByTimeStamp(timestamp) {
+    this.authService.getLatestOlderThanTimeStamp(timestamp).subscribe(latest => {
+
+      if (latest.success) {
+
+          // save oldest timestamp
+          if (latest.posts.length > 0) {
+            this.oldestTimeStamp = latest.posts[latest.posts.length - 1].timeStamp;
+          }
+
+          // make human readable
+          latest.posts.forEach(post => {
+            const date = new Date((Number(post.timeStamp)));
+            post.timeStamp = date.toDateString() + ", " + date.toTimeString();
+          });
+
+          // append to posts
+          this.posts = this.posts.concat(latest.posts);
+          console.log('success', latest.posts);
+
+      } else {
+        console.log(latest);
+      }
+
+    });
+  }
+
   query() {
     if (this.queryString == '') {
       this.authService.getLatestPosts().subscribe(latest => {
@@ -236,6 +275,10 @@ export class HomeComponent implements OnInit {
           this.posts = latest.posts;
           this.selectedPost = -1;
     
+          // save oldest timestamp
+          if (this.posts.length > 0) {
+            this.oldestTimeStamp = this.posts[this.posts.length - 1].timeStamp;
+          }
           // make timestamps human readable
           this.posts.forEach(post => {
             const date = new Date((Number(post.timeStamp)));
@@ -251,6 +294,10 @@ export class HomeComponent implements OnInit {
           this.posts = latest.posts;
           this.selectedPost = -1;
     
+          // save oldest timestamp
+          if (this.posts.length > 0) {
+            this.oldestTimeStamp = this.posts[this.posts.length - 1].timeStamp;
+          }  
           // make timestamps human readable
           this.posts.forEach(post => {
             const date = new Date((Number(post.timeStamp)));

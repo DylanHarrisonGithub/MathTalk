@@ -48,7 +48,7 @@ module.exports = (router) => {
       }
     });
 
-    // get 10 newest posts
+    // get 10 latest posts
     router.get('/latest', (req, res) => {
       Post.find({ 'parentID': '' }).sort('-timeStamp').limit(10).exec((err, posts) => {
         if (err) {
@@ -63,6 +63,22 @@ module.exports = (router) => {
       });
     });
 
+    // get 10 latest posts prior to timestamp
+    router.get('/next/:timestamp', (req, res) => {
+      Post.find({ 'parentID': '', timeStamp: { $lt: req.params.timestamp }}).sort('-timeStamp').limit(10).exec((err, posts) => {
+        if (err) {
+          res.json({ success: false, message: err });
+        } else {
+          if (!posts) {
+            res.json({ success: false, message: 'No recent posts' });
+          } else {
+            res.json({ success: true, posts: posts });
+          }
+        }        
+      });
+    });
+
+    // get latest 10 by hashtag query
     router.get('/query/:query', (req, res) => {
       Post.find({ 'parentID': '', 'meta': "#"+req.params.query}).sort('-timeStamp').limit(10).exec((err, posts) => {
         if (err) {
