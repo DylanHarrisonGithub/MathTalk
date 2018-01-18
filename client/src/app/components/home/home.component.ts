@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, Directive, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { DOCUMENT } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-home',
@@ -28,6 +29,21 @@ export class HomeComponent implements OnInit {
     private authService: AuthService,
     private flashMessagesService: FlashMessagesService
   ) { }
+
+  // detect scroll to bottom of page
+  @HostListener('window:scroll', ['$event']) onScrollEvent($event) {
+
+    // cross-browser compatible position of top of window over document
+    const verticalOffset = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    
+    // cross-browser compatible max vertical offset
+    const limit = Math.max( document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight ) - window.innerHeight;
+    
+    // console.log(verticalOffset);
+    if ((limit - verticalOffset) == 0) {
+      console.log('scrolled to bottom of page!');
+    }
+  } 
 
   ngOnInit() {
     

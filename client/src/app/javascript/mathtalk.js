@@ -19,10 +19,10 @@ function mathtalkInit() {
             } else {
                 if (event.target.lastElementChild.id == 'mathtalk-reply-preview-output') {
                     $('#mathtalk-reply-preview-input').on('change keyup paste', function(event2) {
-                    //document.getElementById('mathtalk-reply-preview-output').innerHTML = mathTalkRender(document.getElementById('mathtalk-reply-preview-input').value);
-                    document.getElementById('mathtalk-reply-preview-output').innerHTML = '';
-                    document.getElementById('mathtalk-reply-preview-output').appendChild(mathTalkRender(document.getElementById('mathtalk-reply-preview-input').value));
-                    MathJax.Hub.Queue(["Typeset", MathJax.Hub], document.getElementById('mathtalk-reply-preview-output'));
+                        //document.getElementById('mathtalk-reply-preview-output').innerHTML = mathTalkRender(document.getElementById('mathtalk-reply-preview-input').value);
+                        document.getElementById('mathtalk-reply-preview-output').innerHTML = '';
+                        document.getElementById('mathtalk-reply-preview-output').appendChild(mathtalkRender(document.getElementById('mathtalk-reply-preview-input').value));
+                        MathJax.Hub.Queue(["Typeset", MathJax.Hub], document.getElementById('mathtalk-reply-preview-output'));
                     });
                 }            
             }
@@ -50,14 +50,14 @@ function mathtalkRender(post) {
         // delete \plot
         //console.log(plots);
         for (var i = 0; i < plots.length; i++) {
-        plots[i] = plots[i].substring(5).replace(/\n/g, "");
+            plots[i] = plots[i].substring(5).replace(/\n/g, "");
         }
 
         //parse json
         try {
         plots = JSON.parse(plots);
         } catch(error) {
-        console.log('could not parse');
+            console.log('could not parse');
         }
     /*           post=post.replace(/\\plot\[[^\]]*\]/g,function(x,y){
         var html = '<span id="mathtalkGraph';
@@ -95,7 +95,7 @@ function mathtalkRender(post) {
             }
         }
     }
-    console.log(htmlDiv.innerHTML);
+    //console.log(htmlDiv.innerHTML);
     return htmlDiv;
 }
    
