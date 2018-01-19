@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
   oldestTimeStamp = Number.MAX_SAFE_INTEGER;
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private flashMessagesService: FlashMessagesService
   ) { }
 
@@ -190,7 +190,7 @@ export class HomeComponent implements OnInit {
 
         // append to posts
         this.posts = this.posts.concat(res.posts);
-        console.log('success', res.posts);       
+        //console.log('success', res.posts);       
       } else {
         console.log('Error retrieving posts', res);
       }

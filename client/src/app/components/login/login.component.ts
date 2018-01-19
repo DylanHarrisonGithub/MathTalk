@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
   messageClass;
   message;
   processing = false;
-  form: FormGroup;
+  form;
   previousUrl;
 
   constructor(
@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit {
           if (this.previousUrl) {
             this.router.navigate([this.previousUrl]);
           } else {
-            this.router.navigate(['/profile']); // Navigate to dashboard view
+            this.router.navigate(['/home']); // Navigate to dashboard view
           }
           
         }, 2000);
